@@ -1,4 +1,4 @@
-const app = require('express')()
+const app = require('express')();
 const MongoClient = require('mongodb').MongoClient;
 let mongoDB;
 const mongoPromise = new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ const mongoPromise = new Promise((resolve, reject) => {
         return;
       }
       const db = client.db(process.env.dbname);
-      mongoDB = db
+      mongoDB = db;
       resolve(db);
       console.log('Connected successfully to mongo');
     }
@@ -92,9 +92,7 @@ app.get('/trending', (req, res) => {
     });
 });
 
-
-
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function() {
+var listener = app.listen(process.env.PORT || 3001, function() {
   console.log('Your app is listening on port ' + listener.address().port);
 });
