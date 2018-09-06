@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+console.log(process.env.dbname)
 const express = require('express');
 const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
