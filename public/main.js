@@ -24,7 +24,7 @@ const app = new Vue({
         1}-${date_.getDate()}`;
     }
     axios
-      .get('https://st-trending.glitch.me/trending?date=' + this.today)
+      .get('/trending?date=' + this.today)
       .then(d => {
         console.log(d.data);
       
