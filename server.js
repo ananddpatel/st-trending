@@ -1,5 +1,24 @@
-const app = require('express')();
+const express = require('express');
+const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
+const bodyparser = require('body-parser');
+
+const app = express();
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+// time is 4 hrs ahead
+
+app.use(express.static('public'));
+
+// http://expressjs.com/en/starter/basic-routing.html
+
 let mongoDB;
 const mongoPromise = new Promise((resolve, reject) => {
   if (mongoDB) {
@@ -21,10 +40,11 @@ const mongoPromise = new Promise((resolve, reject) => {
   );
 });
 
-function generateAnalysis(trendingData, upperLimit) {
+function generateAnalysis(trendingData, lowerLimit, upperLimit) {
   const formatted = {};
   const baseDate = new Date(trendingData[0].time).toLocaleDateString();
-  const lowerLimitTime = new Date(baseDate + ' ' + '09:30');
+  // const lowerLimitTime = new Date(baseDate + ' ' + '09:30');
+  const lowerLimitTime = new Date(baseDate + ' ' + lowerLimit);
   const upperLimitTime = new Date(baseDate + ' ' + upperLimit); // end of day 4:00pm
   // const upperLimitTime = upperLimit; // 1:00pm
 
@@ -36,7 +56,7 @@ function generateAnalysis(trendingData, upperLimit) {
       const symInFormattedData = formatted[s];
       const priceData = {
         sym: s,
-        time: new Date(item.time).toLocaleString(),
+        time: item.time,
         last: item.trending[s].Last,
         open: item.trending[s].Open,
         percentChange:
@@ -66,13 +86,21 @@ function generateAnalysis(trendingData, upperLimit) {
   return formatted;
 }
 
+app.get('/', function(request, response) {
+  response.sendFile(__dirname + '/views/index.html');
+});
+
+
 app.get('/trending', (req, res) => {
   const date = req.query.date
     ? req.query.date
     : new Date().toLocaleString().split(' ')[0];
+  const lowerLimitTime = req.query.lowerLimitTime
+    ? req.query.lowerLimitTime
+    : '13:30'; // 4 hrs ahead, so 13:30 = 9:30 = 9:30pm
   const upperLimitTime = req.query.upperLimitTime
     ? req.query.upperLimitTime
-    : '16:00';
+    : '20:30'; // 4 hrs ahead, so 20:30 = 16:30 = 4:30pm
 
   return mongoPromise
     .then(db => {
@@ -82,8 +110,24 @@ app.get('/trending', (req, res) => {
           if (!items) {
             return res.send([]);
           }
-          const analysis = generateAnalysis(items.value, upperLimitTime);
+          const analysis = generateAnalysis(items.value, lowerLimitTime, upperLimitTime);
           return res.send(analysis);
+        })
+        .catch(err => res.send({ error: JSON.stringify(err) }));
+    })
+    .catch(err => {
+      return res.send({ error: JSON.stringify(err) });
+    });
+});
+
+app.post('/delete-records', function(req, res) {
+    const date = req.body.date ? req.body.date : null;
+    return mongoPromise
+    .then(db => {
+      db.collection('trending')
+        .deleteOne({ _id: date })
+        .then(doc => {
+          return res.send({deleted: doc.deletedCount});
         })
         .catch(err => res.send({ error: JSON.stringify(err) }));
     })
