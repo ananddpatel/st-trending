@@ -1,0 +1,50 @@
+body {
+  padding-top: 3rem;
+}
+
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+nav a,
+.navbar-toggler {
+  color: #929292;
+  font-size: 14px !important;
+}
+
+/* .navbar-toggler {
+  color: re
+} */
+
+.bg-grey {
+  background: #f4f4f4;
+}
+
+.summary {
+  background: #f4f4f4;
+  border-radius: 3px;
+}
+
+.summary-table {
+  font-size: 14px;
+  border-top: hidden;
+}
+
+.arr-table th,
+.arr-table td {
+  padding: 0px;
+}
+
+.box {
+    background: whitesmoke;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px #ededed;
+}
+
+.alert-center {
+    position: absolute;
+    bottom: 0px;
+    right: 0px
+}
