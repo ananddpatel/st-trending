@@ -100,10 +100,10 @@ app.get('/trending', (req, res) => {
     : new Date().toLocaleString().split(' ')[0];
   const lowerLimitTime = req.query.lowerLimitTime
     ? req.query.lowerLimitTime
-    : '13:30'; // 4 hrs ahead, so 13:30 = 9:30 = 9:30pm
+    : '09:30'; // 4 hrs ahead, so 13:30 = 9:30 = 9:30pm
   const upperLimitTime = req.query.upperLimitTime
     ? req.query.upperLimitTime
-    : '20:30'; // 4 hrs ahead, so 20:30 = 16:30 = 4:30pm
+    : '16:30'; // 4 hrs ahead, so 20:30 = 16:30 = 4:30pm
 
   return mongoPromise
     .then(db => {
