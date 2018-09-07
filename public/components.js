@@ -71,6 +71,7 @@ let summaryTable = Vue.component('summary-table', {
         <tbody>
             <tr @click="onClick(item.stock)" v-for="item in computedSummary">
                   <td>
+                    <a target="_blank" :href="'https://stocktwits.com/symbol/' + item.stock"><i class="fa fa-external-link fa-xs"></i></a>
                     <a target="_blank" :href="'https://finviz.com/quote.ashx?t=' + item.stock">{{item.stock}}</a>
                   </td>
                   <td>{{item.bad}}</td>
