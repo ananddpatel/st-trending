@@ -93,7 +93,7 @@ const app = new Vue({
     },
     
     deleteRecordOfDate() {
-      const deletePrompt = prompt("Input the date of");
+      const deletePrompt = prompt("Input the date (yyyy-m-d) of");
       if (deletePrompt && deletePrompt.length > 0) {
         axios.post('/delete-records', {date: deletePrompt}).then(d => {
           if (d.data.deleted === 1) {
