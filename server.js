@@ -10,7 +10,7 @@ const app = express();
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -89,7 +89,7 @@ function generateAnalysis(trendingData, lowerLimit, upperLimit) {
   return formatted;
 }
 
-app.get('/', function(request, response) {
+app.get('/', function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
@@ -123,14 +123,14 @@ app.get('/trending', (req, res) => {
     });
 });
 
-app.post('/delete-records', function(req, res) {
-    const date = req.body.date ? req.body.date : null;
-    return mongoPromise
+app.post('/delete-records', function (req, res) {
+  const date = req.body.date ? req.body.date : null;
+  return mongoPromise
     .then(db => {
       db.collection('trending')
         .deleteOne({ _id: date })
         .then(doc => {
-          return res.send({deleted: doc.deletedCount});
+          return res.send({ deleted: doc.deletedCount });
         })
         .catch(err => res.send({ error: JSON.stringify(err) }));
     })
@@ -140,6 +140,6 @@ app.post('/delete-records', function(req, res) {
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT || 3001, function() {
+var listener = app.listen(process.env.PORT || 3002, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });

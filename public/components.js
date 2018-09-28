@@ -19,18 +19,18 @@ Vue.filter('colorcode', function (num) {
 
 let summaryTable = Vue.component('summary-table', {
   props: ['summary'],
-  data: function() {
+  data: function () {
     return {
-    	showBad: false
+      showBad: false
     };
   },
   computed: {
-  	computedSummary() {
-  		if (this.showBad === 'all') {
-  			return this.summary
-  		}
-  		return this.summary.filter(item => item.bad === this.showBad)
-  	}
+    computedSummary() {
+      if (this.showBad === 'all') {
+        return this.summary
+      }
+      return this.summary.filter(item => item.bad === this.showBad)
+    }
   },
   methods: {
     onClick($event) {
@@ -64,15 +64,17 @@ let summaryTable = Vue.component('summary-table', {
               <th>Cold Close</th>
               <th>High</th>
               <th>Low</th>
+              <th>%Change</th>
               <th>HOT-COLD %Change</th>
+              <th>HOT-COLD High %Change</th>
               <th>High %Change</th>
             </tr>
         </thead>
         <tbody>
             <tr @click="onClick(item.stock)" v-for="item in computedSummary">
                   <td>
-                    <a target="_blank" :href="'https://stocktwits.com/symbol/' + item.stock"><i class="fa fa-external-link fa-xs"></i></a>
-                    <a target="_blank" :href="'https://finviz.com/quote.ashx?t=' + item.stock">{{item.stock}}</a>
+                    <a class="stocktwit-link" target="_blank" :href="'https://stocktwits.com/symbol/' + item.stock"><i class="fa fa-external-link fa-xs"></i></a>
+                    <a class="finviz-link" target="_blank" :href="'https://finviz.com/quote.ashx?t=' + item.stock">{{item.stock}}</a>
                   </td>
                   <td>{{item.bad}}</td>
                   <td>{{item.startTime | date}}</td>
@@ -82,6 +84,8 @@ let summaryTable = Vue.component('summary-table', {
                   <td>{{item.high}}</td>
                   <td>{{item.low}}</td>
                   <td :class="item.percentChange | colorcode">{{item.percentChange | round}}</td>
+                  <td :class="item.hotColdPercentChange | colorcode">{{item.hotColdPercentChange | round}}</td>
+                  <td :class="item.hotColdHighPercentChange | colorcode">{{item.hotColdHighPercentChange | round}}</td>
                   <td>{{item.highPercentChange | round}}</td>
                 </tr>
             </tr>
@@ -91,7 +95,7 @@ let summaryTable = Vue.component('summary-table', {
 
 let pricesTable = Vue.component('prices-table', {
   props: ['prices'],
-  data: function() {
+  data: function () {
     return {};
   },
   computed: {},
