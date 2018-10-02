@@ -50,7 +50,6 @@ function generateAnalysis(trendingData, lowerLimit, upperLimit) {
   const lowerLimitTime = new Date(baseDate + ' ' + lowerLimit);
   const upperLimitTime = new Date(baseDate + ' ' + upperLimit); // end of day 4:00pm
   // const upperLimitTime = upperLimit; // 1:00pm
-
   const isBad = itemData => itemData.Open > itemData.Last;
 
   trendingData.forEach(item => {
@@ -140,6 +139,6 @@ app.post('/delete-records', function (req, res) {
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT || 3002, function () {
+var listener = app.listen(process.env.PORT || 3001, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });

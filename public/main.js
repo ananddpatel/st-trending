@@ -13,10 +13,14 @@ const app = new Vue({
     summary: [],
     selectedStock: null,
     date: null,
-    alertMessage: ''
+    alertMessage: '',
+    start: null,
+    end: null
   },
   mounted() {
     const urlParams = new URLSearchParams(location.search);
+    this.start = urlParams.get('start');
+    this.end = urlParams.get('end');
     if (urlParams.has('date')) {
       this.date = urlParams.get('date')
     } else {
@@ -25,10 +29,14 @@ const app = new Vue({
         1}-${date_.getDate()}`;
     }
     axios
-      .get('/trending?date=' + this.date)
+      .get('/trending', {
+        params: {
+          date: this.date,
+          lowerLimitTime: this.start ? this.start : undefined,
+          upperLimitTime: this.end ? this.end : undefined
+        }
+      })
       .then(d => {
-        console.log(d.data);
-
         this.trending = d.data;
         this.summary = this.getSummary(this.trending);
       });
