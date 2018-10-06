@@ -30,15 +30,30 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item" v-for="link in navLinks">
                         <a class="nav-link  py-0" target="_blank" :href="link.url">{{link.display}}
                         </a>
                     </li>
                 </ul>
-                <el-date-picker class="mr-auto" v-model="date" type="date" placeholder="Pick a day" format="yyyy-M-d"
-                    @change="pick($event)">
-                </el-date-picker>
+                <div class="mr-auto">
+                    <el-date-picker class="" v-model="date" type="date" placeholder="Pick a day" format="yyyy-M-d"
+                        @change="pick($event)" size="mini">
+                    </el-date-picker>
+                    <input type="button" @click="stepBackInTime()" value="<">
+                    <el-time-select v-model="end" :picker-options="{
+                            start: '09:30',
+                            step: '00:05',
+                            end: '17:00'
+                        }"
+                        size="mini" @change="stepForwardInTime()" :arrow-control="true" placeholder="Select time">
+                    </el-time-select>
+                    <input type="button" @click="stepForwardInTime()" value=">">
+
+
+
+                </div>
+
                 <ul class="navbar-nav mr-2">
                     <li class="nav-item">
                         <i class="fa fa-spin fa-cog"></i>

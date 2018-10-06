@@ -15,7 +15,7 @@ const app = new Vue({
     date: null,
     alertMessage: '',
     start: null,
-    end: null
+    end: '9:30',
   },
   mounted() {
     const urlParams = new URLSearchParams(location.search);
@@ -123,6 +123,43 @@ const app = new Vue({
     pick($event) {
       this.date = `${$event.getFullYear()}-${$event.getMonth() + 1}-${$event.getDate()}`;
       window.location = `?date=${this.date}`;
+    },
+    stepBackInTime() {
+      // this.end = 
+      const d = new Date();
+      let splitted = this.end.split(':');
+      d.setHours(Number(splitted[0]))
+      d.setMinutes(Number(splitted[1]) - 5)
+      splitted = d.toLocaleTimeString().split(':');
+      this.end = `${splitted[0]}:${splitted[1]}`;
+      window.location.search = this.getQueryString();
+    },
+    stepForwardInTime() {
+      // console.log(this.end);
+      const d = new Date();
+      let splitted = this.end.split(':');
+      d.setHours(Number(splitted[0]))
+      d.setMinutes(Number(splitted[1]) + 5)
+      splitted = d.toLocaleTimeString().split(':');
+      this.end = `${splitted[0]}:${splitted[1]}`;
+      // console.log(this.end);
+      window.location.search = this.getQueryString();
+    },
+    getQueryString() {
+      const queryObj = {
+        end: this.end ? this.end : undefined,
+        start: this.start ? this.start : undefined,
+        date: this.date ? this.date : undefined
+      }
+      const keys = Object.keys(queryObj);
+      if (keys.length === 0) {
+        return ''
+      }
+      let queryString = '?'
+      keys.filter(k => queryObj[k]).forEach((k, i) => {
+        queryString += `${k}=${queryObj[k]}&`
+      })
+      return queryString;
     }
   }
 });
